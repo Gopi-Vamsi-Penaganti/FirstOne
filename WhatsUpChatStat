@@ -1,0 +1,91 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Oct  1 12:02:01 2018
+
+@author: Gopi Vamsi
+"""
+
+import re
+import matplotlib.pyplot as plt; plt.rcdefaults()
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+
+
+
+
+
+list1=[]
+list2=[]
+
+i=1
+with open('_chat.txt', 'r',encoding='utf-8',errors='ignore') as chat:
+    for line in chat:
+    
+        #print(name)
+        if((len(re.findall(r'PM\s-\s(.\w+)' ,line,re.M|re.I)))!=0):
+            name= (re.findall(r'-\s(.\w+)' ,line,re.M|re.I))
+            if(name[0] not in list1):
+                
+                list1.append(name[0])
+                list2.append(1)
+            else:
+                id=list1.index(name[0])
+                list2[id]=list2[id]+1
+            
+        else:
+            if(len((re.findall(r'\d{5}\s\d{5}' ,line,re.M|re.I)))!=0):
+                name= (re.findall(r'\d{5}\s\d{5}' ,line,re.M|re.I))
+                if(name[0] not in list1):
+                
+                        list1.append(name[0])
+                        list2.append(1)
+                else:
+                        id=list1.index(name[0])
+                        list2[id]=list2[id]+1
+            
+        #print(i)
+        #i=i+1
+
+#for i in range(len(list1)):
+    #print(list1[i],list2[i])
+
+#print(sum(list2))
+x=list1
+y=list2
+for j in range(len(y)):
+    #initially swapped is false
+    swapped = False
+    i = 0
+    while i<len(y)-1:
+        #comparing the adjacent elements
+        if y[i]>y[i+1]:
+            #swapping
+            y[i],y[i+1] = y[i+1],y[i]
+            x[i],x[i+1] = x[i+1],x[i]
+            
+            #Changing the value of swapped
+            swapped = True
+        i = i+1
+    #if swapped is false then the list is sorted
+    #we can stop the loop
+    if swapped == False:
+        break
+y.reverse()
+x.reverse()
+
+objects=x[:10]
+y_pos = np.arange(len(objects))
+performance = y[:10]
+ 
+fig = plt.figure(figsize=(15,10))
+ 
+ 
+plt.bar(y_pos, performance, align='center', alpha=1)
+plt.xticks(y_pos, objects)
+plt.ylabel('Number of messages')
+plt.title('Name / Phone number')
+ 
+plt.show()
+for i in range(len(y)):
+    print(x[i],y[i])
